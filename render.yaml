@@ -1,0 +1,36 @@
+# Render Blueprint for the Qubenix AI Intern Management API.
+# Connect the GitHub repository in Render and it will detect this file.
+# MongoDB Atlas credentials and secrets are entered in the Render dashboard
+# (sync: false) and never committed to the repository.
+services:
+  - type: web
+    name: qubenix-intern-management-api
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_EXPIRES_IN
+        value: 1d
+      - key: TRUST_PROXY
+        value: "1"
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: ADMIN_NAME
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SEED_INTERN_PASSWORD
+        sync: false
