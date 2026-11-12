@@ -1,7 +1,7 @@
 # Verification log
 
 Date: 12 November 2026
-Environment: Windows, Node.js v24.14.0, npm 11.9.0, local in-memory MongoDB demo database.
+Environment: Windows, Node.js v24.14.0, npm 11.9.0, MongoDB Atlas (`Cluster0`) with the local in-memory fallback used earlier for baseline checks.
 
 This log records only checks that were actually executed. Deployment checks are listed separately as not performed.
 
@@ -79,9 +79,19 @@ Nine genuine captures from the running application are stored in `docs/screensho
 8. Intern dashboard
 9. Intern task detail with submission form
 
+## MongoDB Atlas verification
+
+- Authentication succeeded against `Cluster0`; the API reported `connected: true` for `qubenix_intern_management`.
+- Seed created the admin, 3 interns, 6 tasks and 3 submissions (2 approved, 1 awaiting review).
+- Admin and intern logins succeeded against Atlas.
+- Intern task scoping returned only the intern's 2 tasks, and the admin intern list returned 403 for the intern token.
+- The complete workflow passed against Atlas, including transaction-backed intern creation, request-changes feedback, resubmission and approval.
+- Test intern and task were removed afterwards; seeded demonstration data was left intact.
+- After a full API restart, counts (3 interns, 6 tasks, 2 completed, 2 pending, 2 in progress, 3 submissions) and both logins persisted.
+- Local Node SRV lookups required `DNS_SERVERS=8.8.8.8,1.1.1.1` on this machine; Render does not need this setting.
+
 ## Not verified (pending external access)
 
-- MongoDB Atlas connection, seed and persistence across restart. The cluster's SRV record resolves and a shard accepts TCP on 27017, but authentication failed because the supplied connection string still contained the literal `<...>` password placeholder.
 - Render backend deployment, build/runtime logs and public health endpoint.
 - Vercel frontend deployment, SPA refresh routing and production CORS.
 - The complete workflow on the deployed public URLs.

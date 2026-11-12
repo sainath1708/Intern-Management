@@ -28,7 +28,7 @@ Give Qubenix AI a single internal tool to:
 | React + Vite + Tailwind frontend | Implemented |
 | React Router, Axios, Lucide icons, Context API, toasts | Implemented |
 | Node.js + Express REST API | Implemented |
-| MongoDB Atlas + Mongoose models and references | Implemented (Atlas connection configured through `MONGODB_URI`) |
+| MongoDB Atlas + Mongoose models and references | Verified against Atlas: seeded data, transaction-backed intern creation, and persistence across an API restart |
 | JWT authentication + bcrypt hashing | Implemented |
 | express-validator, Helmet, CORS, Rate limiting | Implemented |
 | Admin + Intern roles with server-side authorization | Implemented |
@@ -623,7 +623,7 @@ Record with any screen recorder (OBS, Loom, Windows Game Bar). Show real interac
 ## 21. Known limitations
 
 - The source is published on GitHub, but Render/Vercel deployment has not been completed yet, so public application URLs are not available.
-- MongoDB Atlas is not configured in this environment, so local verification ran against the documented in-memory fallback. Atlas instructions and connection validation are included.
+- Local development also supports the documented in-memory fallback. MongoDB Atlas is configured, seeded and verified, including persistence across a restart and transaction-backed intern creation.
 - No password reset / change-password flow (not part of the assessment scope). Admins cannot reset an intern password after creation.
 - No file uploads; submissions accept URLs to GitHub/documents, not hosted files.
 - No email notifications; feedback is delivered in-app.
