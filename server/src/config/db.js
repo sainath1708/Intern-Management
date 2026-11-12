@@ -1,5 +1,15 @@
+import dns from 'node:dns';
 import mongoose from 'mongoose';
 import { env } from './env.js';
+
+// Some local networks refuse SRV lookups from Node's resolver even though the
+// system resolver works. An optional comma-separated DNS_SERVERS list keeps
+// Atlas SRV connections working without changing the host configuration.
+const dnsServers = (process.env.DNS_SERVERS || '')
+  .split(',')
+  .map((server) => server.trim())
+  .filter(Boolean);
+if (dnsServers.length > 0) dns.setServers(dnsServers);
 
 const STATES = {
   0: 'disconnected',

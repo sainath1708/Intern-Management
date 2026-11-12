@@ -8,8 +8,8 @@ This log records only checks that were actually executed. Deployment checks are 
 ## Repository audit
 
 - Branch: `master`
-- Commits: 8 (history preserved; nothing reset or rewritten)
-- Remote: none configured
+- Commits: 8 at the start of this phase; existing history preserved and pushed unchanged
+- Remote: `origin` → <https://github.com/sainath1708/Intern-Management> (public, default branch `master`)
 - Working tree before this phase: clean
 - Tracked environment files: `.env.example` only; no `.env`, connection string, JWT secret or password is tracked
 - GitHub CLI, Vercel CLI, Render CLI: not installed on this machine
@@ -81,7 +81,7 @@ Nine genuine captures from the running application are stored in `docs/screensho
 
 ## Not verified (pending external access)
 
-- MongoDB Atlas connection, seed and persistence across restart.
+- MongoDB Atlas connection, seed and persistence across restart. The cluster's SRV record resolves and a shard accepts TCP on 27017, but authentication failed because the supplied connection string still contained the literal `<...>` password placeholder.
 - Render backend deployment, build/runtime logs and public health endpoint.
 - Vercel frontend deployment, SPA refresh routing and production CORS.
 - The complete workflow on the deployed public URLs.

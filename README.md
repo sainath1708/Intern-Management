@@ -384,7 +384,8 @@ The API then starts a temporary in-memory MongoDB (via `mongodb-memory-server`),
 | `FRONTEND_URL` | Yes | Allowed browser origins, comma separated |
 | `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Seed only | Primary administrator created by the seed |
 | `SEED_INTERN_PASSWORD` | No | Demo intern password (defaults to `Intern@12345`) |
-| `TRUST_PROXY` | No (1) | Reverse proxy hops (Render = 1) |
+| `TRUST_PROXY` | No (1) | Reverse proxy hops; accepts `true` or a number (Render = 1) |
+| `DNS_SERVERS` | No | Comma-separated resolvers (e.g. `8.8.8.8,1.1.1.1`) for networks whose default resolver refuses Atlas SRV lookups. Leave unset on Render. |
 
 Environment validation runs at startup. Production starts fail fast if the Mongo URI or JWT secret is missing/too short.
 
@@ -411,8 +412,10 @@ The demo shortcuts only render when both the email and password variables are pr
    ```text
    mongodb+srv://<user>:<password>@<cluster>.mongodb.net/qubenix?retryWrites=true&w=majority
    ```
-5. Put it in `server/.env` as `MONGODB_URI`.
+5. Put it in `server/.env` as `MONGODB_URI`, set `USE_IN_MEMORY_DB=false`, and append a database name (for example `/qubenix_intern_management`) before the query string.
 6. Start the API and confirm `GET /api/health` reports `"database": { "connected": true }`.
+
+If Node reports `querySrv ECONNREFUSED` while Windows can resolve the cluster, the local resolver is refusing SRV lookups from Node. Add `DNS_SERVERS=8.8.8.8,1.1.1.1` to `server/.env`; the API applies it before connecting. Leave it unset on Render.
 
 Atlas clusters are replica sets, so the User + Intern creation uses a real multi-document transaction there.
 
