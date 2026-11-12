@@ -544,7 +544,7 @@ Nothing has been deployed from this workspace. The configuration and steps below
 **Repository:** <https://github.com/sainath1708/Intern-Management>
 
 - Default branch: `master`
-- The full implementation history was pushed unchanged (nine commits, including the screenshot/documentation commit).
+- The original implementation history was pushed unchanged; later documentation and configuration commits are on the same `master` branch.
 - `.env` files, database URIs, JWT secrets and passwords are git-ignored and are not part of the repository.
 
 To work from a clone:
