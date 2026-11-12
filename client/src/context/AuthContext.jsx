@@ -32,8 +32,6 @@ export const AuthProvider = ({ children }) => {
     setUser(nextUser);
   }, []);
 
-  // Re-validate a stored token on load so a page refresh keeps the session
-  // while archived or expired accounts are signed out.
   useEffect(() => {
     let cancelled = false;
     const storedToken = localStorage.getItem(TOKEN_STORAGE_KEY);

@@ -90,9 +90,17 @@ Nine genuine captures from the running application are stored in `docs/screensho
 - After a full API restart, counts (3 interns, 6 tasks, 2 completed, 2 pending, 2 in progress, 3 submissions) and both logins persisted.
 - Local Node SRV lookups required `DNS_SERVERS=8.8.8.8,1.1.1.1` on this machine; Render does not need this setting.
 
-## Not verified (pending external access)
+## Live deployment verification
 
-- Render backend deployment, build/runtime logs and public health endpoint.
-- Vercel frontend deployment, SPA refresh routing and production CORS.
-- The complete workflow on the deployed public URLs.
-- A recorded video demonstration (script provided in `docs/DEMO_SCRIPT.md`).
+- Frontend: <https://intern-management-nu.vercel.app> returned HTTP 200 and serves the built SPA.
+- API: <https://intern-management-hsf2.onrender.com/api/health> returned HTTP 200 with `environment: production` and `database.connected: true` on `qubenix_intern_management`.
+- The deployed JavaScript bundle points to `https://intern-management-hsf2.onrender.com/api`.
+- Admin and intern login both returned HTTP 200 on the deployed API.
+- CORS preflight from `https://intern-management-nu.vercel.app` returned 204 with the matching allow-origin header.
+- The full 18-step workflow passed against the deployed API: login, create intern, role isolation, create/assign task, start, submit, duplicate guard, request changes, feedback, resubmit, approve, complete, dashboard update and cleanup.
+- Nine screenshots were recaptured from the deployed application with headless Chrome.
+
+## Not fully verified
+
+- The approval and request-changes buttons were exercised against the live API rather than clicked through in the deployed browser UI, to avoid altering the seeded demonstration records.
+- A recorded video demonstration is not included; the script and recording instructions are in `docs/DEMO_SCRIPT.md`.

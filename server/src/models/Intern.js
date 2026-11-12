@@ -50,7 +50,6 @@ const internSchema = new mongoose.Schema(
       },
       default: INTERN_STATUS.ACTIVE,
     },
-    // Safe deletion: archived interns keep their task and submission history.
     deletedAt: {
       type: Date,
       default: null,

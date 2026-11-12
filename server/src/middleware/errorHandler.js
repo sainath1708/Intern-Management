@@ -39,7 +39,6 @@ export const errorHandler = (error, req, res, _next) => {
 
   if (statusCode >= 500) {
     console.error('[error]', error);
-    // Never leak implementation details (stack traces, driver errors) in production.
     if (env.isProduction) {
       message = 'An unexpected error occurred. Please try again later.';
       errors = [];

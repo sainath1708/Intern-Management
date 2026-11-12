@@ -81,11 +81,6 @@ export const getInternById = async (id) => {
   };
 };
 
-/**
- * Creates the login account and the intern profile together.
- * On Atlas a transaction guarantees both writes; on standalone MongoDB a
- * compensating delete removes the account if the profile write fails.
- */
 export const createIntern = async (payload) => {
   const email = payload.email.trim().toLowerCase();
 
@@ -130,7 +125,6 @@ export const createIntern = async (payload) => {
 
     return internDTO(profile);
   } catch (error) {
-    // No-op when the transaction rolled back; essential on standalone MongoDB.
     if (createdUserId) await User.deleteOne({ _id: createdUserId });
     if (error?.code === 11000) throw ApiError.conflict('An account with this email address already exists');
     throw error;
@@ -180,11 +174,6 @@ export const updateIntern = async (id, payload) => {
   return internDTO(updated);
 };
 
-/**
- * Safe deletion policy:
- *  - intern without task/submission history -> account and profile are removed
- *  - intern with history -> archived (login disabled, history preserved)
- */
 export const removeIntern = async (id) => {
   assertValidId(id);
 

@@ -18,8 +18,4 @@ export const signAccessToken = (user) =>
     },
   );
 
-/**
- * Verifies signature, expiry, issuer and audience.
- * Throws jsonwebtoken errors which the auth middleware maps to 401 responses.
- */
 export const verifyAccessToken = (token) => jwt.verify(token, env.jwtSecret, { issuer: ISSUER, audience: AUDIENCE });

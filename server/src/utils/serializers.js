@@ -2,7 +2,6 @@ const toIso = (value) => (value ? new Date(value).toISOString() : null);
 
 export const internSummary = (intern) => {
   if (!intern) return null;
-  // Populated document or plain object; ids may be ObjectId instances.
   const id = intern._id || intern.id;
   if (!id) return null;
   return {

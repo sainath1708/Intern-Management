@@ -28,7 +28,6 @@ export const formatDateTime = (value) => {
   return dateTimeFormatter.format(date);
 };
 
-/** yyyy-mm-dd for <input type="date">. */
 export const toDateInputValue = (value) => {
   const date = value ? new Date(value) : new Date();
   if (Number.isNaN(date.getTime())) return '';
@@ -36,14 +35,12 @@ export const toDateInputValue = (value) => {
   return new Date(date.getTime() - offset).toISOString().slice(0, 10);
 };
 
-/** Converts a date-only input value to midday local time so the date stays stable. */
 export const dateOnlyToIso = (value) => {
   if (!value) return null;
   const date = new Date(`${value}T12:00:00`);
   return Number.isNaN(date.getTime()) ? null : date.toISOString();
 };
 
-/** Converts a date input value to an ISO string at 18:00 local time. */
 export const dateInputToIso = (value) => {
   if (!value) return null;
   const date = new Date(`${value}T18:00:00`);
@@ -98,6 +95,5 @@ export const avatarTone = (name = '') => {
   return AVATAR_TONES[sum % AVATAR_TONES.length];
 };
 
-/** Trims text for table previews without breaking words. */
 export const truncate = (value = '', length = 90) =>
   value.length > length ? `${value.slice(0, length).trimEnd()}…` : value;

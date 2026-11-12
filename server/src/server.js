@@ -7,7 +7,6 @@ let memoryServer = null;
 const resolveDatabaseUri = async () => {
   if (env.mongoUri) return env.mongoUri;
 
-  // Local development convenience only. Never allowed in production (see config/env.js).
   const { MongoMemoryServer } = await import('mongodb-memory-server');
   memoryServer = await MongoMemoryServer.create();
   const uri = memoryServer.getUri('qubenix_intern_management');
@@ -20,8 +19,6 @@ const start = async () => {
   const uri = await resolveDatabaseUri();
   await connectDB(uri);
 
-  // The temporary demo database starts empty; seed it so the app is usable
-  // immediately. This never runs against a real MongoDB Atlas database.
   if (env.useInMemoryDb) {
     const { seedDatabase } = await import('./seed/seed.js');
     try {

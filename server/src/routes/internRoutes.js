@@ -18,7 +18,6 @@ import { ROLES } from '../utils/constants.js';
 
 const router = Router();
 
-// Intern management is strictly administrative.
 router.use(authenticate, authorize(ROLES.ADMIN));
 
 router.get('/', listInternsValidation, validate, getInterns);

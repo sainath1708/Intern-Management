@@ -11,8 +11,6 @@ import { validateLogin } from '../../utils/validation';
 import { ROLE_HOME } from '../../utils/constants';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
-// Demo shortcuts are opt-in through Vite environment variables so production
-// builds never ship administrator credentials inside the JavaScript bundle.
 const demoAccounts = [
   {
     label: 'Admin demo',

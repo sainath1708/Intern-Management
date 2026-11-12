@@ -25,7 +25,6 @@ const router = Router();
 
 router.use(authenticate);
 
-// Both roles can read, but the service scopes interns to their own tasks.
 router.get('/', listTasksValidation, validate, getTasks);
 router.get('/:id', taskIdValidation, validate, getTask);
 
@@ -33,10 +32,8 @@ router.post('/', authorize(ROLES.ADMIN), createTaskValidation, validate, postTas
 router.put('/:id', authorize(ROLES.ADMIN), updateTaskValidation, validate, putTask);
 router.delete('/:id', authorize(ROLES.ADMIN), taskIdValidation, validate, deleteTaskHandler);
 
-// Only the assigned intern can move the task forward (Pending -> In Progress).
 router.patch('/:id/status', authorize(ROLES.INTERN), updateTaskStatusValidation, validate, patchTaskStatus);
 
-// Interns submit work against their own tasks.
 router.post(
   '/:id/submissions',
   authorize(ROLES.INTERN),

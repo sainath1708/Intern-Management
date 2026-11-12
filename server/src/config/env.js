@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 
-// server/.env - loaded once, before anything reads process.env
 dotenv.config({ path: path.resolve(currentDir, '../../.env') });
 
 const nodeEnv = process.env.NODE_ENV || 'development';
@@ -35,12 +34,8 @@ if (jwtSecret && jwtSecret.length < 32) {
   problems.push('JWT_SECRET must be at least 32 characters long');
 }
 
-// A production API with a localhost-only allowlist would reject the deployed SPA.
 requireInProduction('FRONTEND_URL', process.env.FRONTEND_URL?.trim());
 
-// Hosts commonly provide TRUST_PROXY=true/false while Express expects a hop
-// count. Normalise both forms, and fall back to one proxy hop for anything
-// unrecognised (Render terminates TLS in front of the app).
 const parseTrustProxy = (value) => {
   const normalized = String(value ?? '').trim().toLowerCase();
   if (normalized === 'true') return 1;
@@ -60,8 +55,6 @@ const frontendUrls = (process.env.FRONTEND_URL || 'http://localhost:5173')
   .map((origin) => origin.trim().replace(/\/$/, ''))
   .filter(Boolean);
 
-// Some shells and runners export PORT=0. Only a positive, valid port is accepted
-// so that a stray value cannot silently move the API to a random port.
 const parsedPort = Number.parseInt(process.env.PORT ?? '', 10);
 const port = Number.isInteger(parsedPort) && parsedPort > 0 && parsedPort <= 65535 ? parsedPort : 5000;
 
@@ -81,7 +74,7 @@ export const env = Object.freeze({
     email: process.env.ADMIN_EMAIL?.trim().toLowerCase() || '',
     password: process.env.ADMIN_PASSWORD || '',
   }),
-  seedInternPassword: process.env.SEED_INTERN_PASSWORD || 'Intern@12345',
+  seedInternPassword: process.env.SEED_INTERN_PASSWORD || '',
   trustProxy: parseTrustProxy(process.env.TRUST_PROXY),
   bcryptRounds: 12,
 });

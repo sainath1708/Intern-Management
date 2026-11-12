@@ -10,14 +10,6 @@ const isTransactionUnsupported = (error) => {
   );
 };
 
-/**
- * Runs `work(session)` inside a MongoDB multi-document transaction.
- *
- * MongoDB Atlas clusters are replica sets, so transactions work there.
- * A standalone local mongod cannot run transactions: in that case the work
- * runs without a session and callers must keep their own compensating
- * rollback (the intern creation service does exactly that).
- */
 export const withTransaction = async (work) => {
   const session = await mongoose.startSession();
 

@@ -8,10 +8,8 @@ import { ROLES } from '../utils/constants.js';
 export const login = async ({ email, password }) => {
   const normalizedEmail = String(email).trim().toLowerCase();
 
-  // passwordHash is select:false by default - opt in only for verification.
   const user = await User.findOne({ email: normalizedEmail }).select('+passwordHash');
 
-  // Same generic message for unknown email and wrong password.
   if (!user) throw ApiError.unauthorized('Invalid email or password');
 
   const passwordMatches = await user.verifyPassword(password);

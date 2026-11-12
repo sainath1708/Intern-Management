@@ -20,5 +20,4 @@ export const paginationMeta = ({ page, limit, total }) => ({
   hasPreviousPage: page > 1,
 });
 
-/** Escapes user input before it is used inside a RegExp search. */
 export const escapeRegex = (value = '') => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

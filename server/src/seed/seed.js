@@ -41,7 +41,6 @@ const internSeeds = [
   },
 ];
 
-// Six demo tasks covering every status, every priority and multiple interns.
 const taskSeeds = [
   {
     key: 'Build responsive intern dashboard',
@@ -143,6 +142,7 @@ const validateSeedConfig = () => {
   if (!env.admin.name) missing.push('ADMIN_NAME');
   if (!env.admin.email) missing.push('ADMIN_EMAIL');
   if (!env.admin.password) missing.push('ADMIN_PASSWORD');
+  if (!env.seedInternPassword) missing.push('SEED_INTERN_PASSWORD');
   if (missing.length > 0) {
     throw new Error(`Seed configuration is incomplete. Missing: ${missing.join(', ')}. Add them to server/.env`);
   }
@@ -213,7 +213,6 @@ const ensureIntern = async (seed, password, report) => {
     report.interns.push(`${seed.name}: created`);
     return intern;
   } catch (error) {
-    // Compensating rollback: never leave a login account without its profile.
     await User.deleteOne({ _id: user._id });
     throw error;
   }
@@ -277,10 +276,6 @@ const ensureSubmissions = async ({ admin, tasksByKey, report }) => {
   }
 };
 
-/**
- * Idempotent demo seed. Existing accounts are never modified, so re-running it
- * will not overwrite passwords or reset real work.
- */
 export const seedDatabase = async ({ log = console.log } = {}) => {
   validateSeedConfig();
 

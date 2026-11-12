@@ -358,7 +358,7 @@ Known trade-off: the JWT is stored in `localStorage`, which is readable by JavaS
 - **Database:** MongoDB Atlas provides the replica set (transactions work) and network access is restricted to the API.
 - **CORS:** Render's `FRONTEND_URL` must exactly match the Vercel origin, or the browser will block requests.
 
-The repository contains `render.yaml` and `client/vercel.json`. Deployment itself requires accounts and secrets, so it has not been performed here.
+The repository contains `render.yaml` and `client/vercel.json`. The application is deployed at <https://intern-management-nu.vercel.app> with the API at <https://intern-management-hsf2.onrender.com/api>; the deployed health endpoint reports a connected Atlas database, and both roles can sign in.
 
 ---
 

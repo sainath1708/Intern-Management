@@ -6,10 +6,6 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { verifyAccessToken } from '../utils/token.js';
 import { ROLES } from '../utils/constants.js';
 
-/**
- * Verifies the Bearer token, loads the account from MongoDB and attaches
- * req.user (and req.intern when the account belongs to an intern).
- */
 export const authenticate = asyncHandler(async (req, _res, next) => {
   const header = req.headers.authorization || '';
   const [scheme, token] = header.split(' ');
@@ -44,7 +40,6 @@ export const authenticate = asyncHandler(async (req, _res, next) => {
   next();
 });
 
-/** Role guard - always used together with authenticate(). */
 export const authorize =
   (...roles) =>
   (req, _res, next) => {

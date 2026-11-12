@@ -56,7 +56,6 @@ const userSchema = new mongoose.Schema(
 
 userSchema.index({ role: 1 });
 
-/** Hashes and assigns a plain-text password. The plain value is never stored. */
 userSchema.methods.setPassword = async function setPassword(plainPassword) {
   this.passwordHash = await bcrypt.hash(plainPassword, env.bcryptRounds);
 };

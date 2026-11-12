@@ -3,10 +3,6 @@ import { ApiError } from '../utils/ApiError.js';
 
 const envelope = (message) => ({ success: false, message, errors: [] });
 
-/**
- * Only failed login attempts count against the limit, so a normal working
- * session never consumes the quota. Protects against credential stuffing.
- */
 export const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 12,

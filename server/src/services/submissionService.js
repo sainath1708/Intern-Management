@@ -49,7 +49,6 @@ export const createSubmission = async ({ taskId, internProfile, payload }) => {
     attempt,
   });
 
-  // A submitted piece of work always keeps the task in progress.
   if (task.status !== TASK_STATUS.IN_PROGRESS) {
     task.status = TASK_STATUS.IN_PROGRESS;
     await task.save();

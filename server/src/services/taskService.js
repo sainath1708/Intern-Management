@@ -15,7 +15,6 @@ const assertValidTaskId = (id) => {
 const withPopulatedIntern = (query) =>
   query.populate('assignedTo', 'name email department status').populate('createdBy', 'name email');
 
-/** Latest submission per task, used for review-status badges in task lists. */
 const latestSubmissionMap = async (taskIds) => {
   if (taskIds.length === 0) return new Map();
 
@@ -52,7 +51,6 @@ export const listTasks = async ({ user, internProfile, query = {} }) => {
   const { page, limit, skip } = parsePagination(query);
   const filter = {};
 
-  // Interns are always scoped to their own tasks, regardless of query parameters.
   if (user.role === ROLES.INTERN) {
     filter.assignedTo = internProfile._id;
   } else if (query.internId) {
@@ -180,10 +178,6 @@ export const deleteTask = async (taskId) => {
   };
 };
 
-/**
- * Interns may only move their own Pending task to In Progress.
- * Completion is exclusively the result of an admin approving a submission.
- */
 export const updateTaskStatusAsIntern = async ({ taskId, internProfile, status }) => {
   assertValidTaskId(taskId);
 

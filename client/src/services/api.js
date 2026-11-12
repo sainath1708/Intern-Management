@@ -28,7 +28,6 @@ api.interceptors.response.use(
     const status = error.response?.status;
     const payload = error.response?.data;
 
-    // Expired or revoked sessions are cleared globally so the app returns to login.
     if (status === 401) {
       localStorage.removeItem(TOKEN_STORAGE_KEY);
       localStorage.removeItem(USER_STORAGE_KEY);

@@ -72,7 +72,6 @@ const submissionSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
-    // Attempt number within the task, starting at 1.
     attempt: {
       type: Number,
       required: true,
