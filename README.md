@@ -41,8 +41,9 @@ Give Qubenix AI a single internal tool to:
 | README + EXPLAIN + demo instructions | Implemented |
 | Application screenshots | Included — 9 genuine captures in `docs/screenshots/` |
 | Video demonstration | Script and recording instructions ready (`docs/DEMO_SCRIPT.md`); recording not supplied |
-| Deployment configuration (Render + Vercel) | Configuration included; **not deployed** (no hosting accounts/credentials available here) |
-| Live deployment links | **Not available** — nothing was deployed |
+| GitHub repository | Published — <https://github.com/sainath1708/Intern-Management> |
+| Deployment configuration (Render + Vercel) | Configuration included; **not deployed yet** (hosting accounts/credentials pending) |
+| Live deployment links | **Not available yet** — nothing has been deployed |
 
 ---
 
@@ -328,8 +329,8 @@ Errors:
 **Prerequisites:** Node.js ≥ 18.18, npm, a MongoDB Atlas cluster (or MongoDB running locally).
 
 ```bash
-git clone <your-repository-url>
-cd qubenix-intern-management
+git clone https://github.com/sainath1708/Intern-Management.git
+cd Intern-Management
 
 # install root tooling (concurrently), server and client dependencies
 npm install
@@ -537,12 +538,17 @@ Nothing has been deployed from this workspace. The configuration and steps below
 
 ## 17. GitHub repository
 
-The project is maintained as a standalone Git repository with commits per implementation phase. No public repository URL is included here because this workspace has not been pushed to GitHub (no remote credentials were available). Add the remote and push with:
+**Repository:** <https://github.com/sainath1708/Intern-Management>
+
+- Default branch: `master`
+- The full implementation history was pushed unchanged (nine commits, including the screenshot/documentation commit).
+- `.env` files, database URIs, JWT secrets and passwords are git-ignored and are not part of the repository.
+
+To work from a clone:
 
 ```bash
-git remote add origin <your-repository-url>
-git branch -M main
-git push -u origin main
+git clone https://github.com/sainath1708/Intern-Management.git
+cd Intern-Management
 ```
 
 ---
@@ -613,7 +619,7 @@ Record with any screen recorder (OBS, Loom, Windows Game Bar). Show real interac
 
 ## 21. Known limitations
 
-- No deployment was performed; Render/Vercel URLs are absent by design.
+- The source is published on GitHub, but Render/Vercel deployment has not been completed yet, so public application URLs are not available.
 - MongoDB Atlas is not configured in this environment, so local verification ran against the documented in-memory fallback. Atlas instructions and connection validation are included.
 - No password reset / change-password flow (not part of the assessment scope). Admins cannot reset an intern password after creation.
 - No file uploads; submissions accept URLs to GitHub/documents, not hosted files.
