@@ -39,6 +39,8 @@ Give Qubenix AI a single internal tool to:
 | Idempotent seed script | Implemented |
 | Automated API tests | Implemented — 63 integration tests (Supertest + in-memory MongoDB) |
 | README + EXPLAIN + demo instructions | Implemented |
+| Application screenshots | Included — 9 genuine captures in `docs/screenshots/` |
+| Video demonstration | Script and recording instructions ready (`docs/DEMO_SCRIPT.md`); recording not supplied |
 | Deployment configuration (Render + Vercel) | Configuration included; **not deployed** (no hosting accounts/credentials available here) |
 | Live deployment links | **Not available** — nothing was deployed |
 
@@ -390,6 +392,10 @@ Environment validation runs at startup. Production starts fail fast if the Mongo
 | Variable | Purpose |
 | --- | --- |
 | `VITE_API_URL` | API base URL including `/api`, e.g. `http://localhost:5000/api` |
+| `VITE_DEMO_ADMIN_EMAIL` / `VITE_DEMO_ADMIN_PASSWORD` | Optional local-only shortcut buttons on the login page. Leave blank in production. |
+| `VITE_DEMO_INTERN_EMAIL` / `VITE_DEMO_INTERN_PASSWORD` | Optional local-only intern shortcut. Leave blank in production. |
+
+The demo shortcuts only render when both the email and password variables are present. Production builds must leave them blank so no credentials are bundled into the JavaScript. |
 
 `server/.env` and `client/.env` are git-ignored; only the `.example` files are committed. No real secrets exist in this repository.
 
@@ -480,7 +486,7 @@ Coverage includes:
 - **Submissions (16):** valid submission, missing/invalid links, unauthorized intern, correct relationships, task stays In Progress, duplicate awaiting review, admin list/summary/search, feedback required, Needs Changes flow, resubmission + history, approval completes task, blocked submissions after completion, double approval.
 - **Dashboard (5):** exact six metric counts, pending review/overdue counts, recent submissions, recent tasks, intern scoping, authentication requirement.
 
-Frontend production build (`npm run build`) succeeds. Manual browser checks verified login, role redirects, dashboard, intern list, task list, submission list and review modal rendering; API behavior for the full workflow is covered by the automated suite above.
+Frontend production build (`npm run build`) succeeds. Manual browser checks verified login, role redirects, dashboard (3 interns, 6 tasks: 2 completed / 2 pending / 2 in progress), intern list, task list, submission list and review modal rendering; API behavior for the full workflow is covered by the automated suite above. The same checks are documented visually in `docs/screenshots/` (see section 18).
 
 ---
 
@@ -496,24 +502,27 @@ Nothing has been deployed from this workspace. The configuration and steps below
    - Build command: `npm install`
    - Start command: `npm start`
    - Health check path: `/api/health`
-3. Configure environment variables in the Render dashboard:
-   - `NODE_ENV=production`
+3. Configure environment variables in the Render dashboard. `render.yaml` already supplies `NODE_ENV`, `JWT_EXPIRES_IN` and `TRUST_PROXY`; add the secret values yourself:
    - `MONGODB_URI=<Atlas URI>`
    - `JWT_SECRET=<32+ char secret>`
-   - `JWT_EXPIRES_IN=1d`
-   - `FRONTEND_URL=https://<your-vercel-app>.vercel.app`
+   - `FRONTEND_URL=https://<your-vercel-app>.vercel.app` (comma separated for several origins)
    - `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`
-   - `TRUST_PROXY=1`
+   - `SEED_INTERN_PASSWORD` (optional; defaults to `Intern@12345`)
 4. Deploy, then open a Render shell and run `npm run seed` once.
-5. Verify `https://<service>.onrender.com/api/health` returns 200.
+5. Verify `https://<service>.onrender.com/api/health` returns 200 with `"database": { "connected": true }`.
+6. Sign in once with the admin account and once with an intern account to confirm Atlas persistence.
+
+`TRUST_PROXY=true` and `TRUST_PROXY=1` are both accepted; the API normalises either form to one trusted proxy hop.
 
 ### Frontend → Vercel
 
 1. Import the repository in Vercel.
-2. Root directory: `client` (framework preset: Vite; `vercel.json` is included).
+2. Set **Root Directory** to `client` (the included `client/vercel.json` handles the Vite build and SPA routing).
 3. Environment variable: `VITE_API_URL=https://<render-service>.onrender.com/api`.
-4. Deploy. `vercel.json` rewrites all SPA routes to `index.html`.
-5. Update the Render `FRONTEND_URL` to the Vercel production URL and redeploy the API so CORS allows it.
+4. Leave `VITE_DEMO_ADMIN_EMAIL`, `VITE_DEMO_ADMIN_PASSWORD`, `VITE_DEMO_INTERN_EMAIL` and `VITE_DEMO_INTERN_PASSWORD` unset in production.
+5. Deploy. The rewrite sends every non-file route to `index.html`, so refreshing `/admin/tasks` or `/intern/tasks/:id` works.
+6. Update the Render `FRONTEND_URL` to the Vercel production URL and redeploy the API so CORS allows it.
+7. Confirm the browser console has no CORS errors and both roles can sign in.
 
 ### Production checklist
 
@@ -540,18 +549,39 @@ git push -u origin main
 
 ## 18. Application screenshots
 
-Screenshots are **not included** in this workspace. To add them:
+These are genuine captures from the running application (seeded demo data, local API + Vite client), stored in [`docs/screenshots/`](docs/screenshots/).
 
-1. Start the app locally and sign in as the admin.
-2. Capture: login, admin dashboard, interns table, create-intern modal, tasks table, submissions review modal, intern dashboard, intern task detail with feedback.
-3. Save them under `docs/screenshots/` and reference them here, e.g.:
-   ```markdown
-   ![Admin dashboard](docs/screenshots/admin-dashboard.png)
-   ```
+### Login
+
+![Login page](docs/screenshots/01-login.png)
+
+### Admin workspace
+
+![Admin dashboard](docs/screenshots/02-admin-dashboard.png)
+
+![Intern management](docs/screenshots/03-intern-management.png)
+
+![Intern profile](docs/screenshots/04-intern-profile.png)
+
+![Task management](docs/screenshots/05-task-management.png)
+
+![Submissions](docs/screenshots/06-submissions.png)
+
+![Submission review modal](docs/screenshots/07-review-modal.png)
+
+### Intern workspace
+
+![Intern dashboard](docs/screenshots/08-intern-dashboard.png)
+
+![Intern task detail and submission form](docs/screenshots/09-intern-task-detail.png)
+
+To reproduce them, start the app with the local in-memory demo database, sign in with the demo accounts from section 13 and follow the same pages.
 
 ---
 
 ## 19. Video demonstration plan (3–5 minutes)
+
+The full shot-by-shot narration, exact clicks and recording instructions are in [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md). Summary:
 
 1. **Introduction (20s):** project name, stack, roles.
 2. **Admin login (15s):** sign in, land on the dashboard.
@@ -591,7 +621,8 @@ Record with any screen recorder (OBS, Loom, Windows Game Bar). Show real interac
 - Access tokens are stored in `localStorage` and last 1 day; no refresh tokens or server-side revocation list.
 - Rate limiting is in-memory per API instance (fine for one Render instance; use a shared store when scaling horizontally).
 - `bcryptjs` is used instead of the native `bcrypt` package to avoid platform build tooling; both produce standard bcrypt hashes.
-- No CI pipeline, screenshot assets or recorded demonstration video are included.
+- No CI pipeline is configured.
+- Screenshots are included, but no recorded video is bundled: `docs/DEMO_SCRIPT.md` provides the exact narration, sequence and recording instructions for the assessor.
 - Dashboard analytics are computed with count queries on each request; acceptable at intern-team scale, would be cached/aggregated at larger volume.
 
 ---

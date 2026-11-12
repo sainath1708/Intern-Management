@@ -342,7 +342,8 @@ Feature services (`authService`, `internService`, `taskService`, `submissionServ
 - Input validation and sanitization; Mongo operator sanitization against NoSQL injection.
 - Generic login errors to prevent account enumeration.
 - No secrets in the repository: only `.env.example` files; `.env` is git-ignored.
-- Production fail-fast for missing/weak configuration.
+- Production fail-fast for missing/weak configuration, including a missing `FRONTEND_URL` (otherwise the deployed SPA would be blocked by CORS).
+- Login page demo shortcuts are opt-in through `VITE_DEMO_*` variables and are absent from production builds; administrator credentials are never hardcoded in the bundle.
 - Safe deletion preserves audit history.
 - Errors do not expose stack traces or driver details in production.
 
@@ -353,7 +354,7 @@ Known trade-off: the JWT is stored in `localStorage`, which is readable by JavaS
 ## 21. Deployment architecture
 
 - **Frontend:** Vercel serves the static Vite build; `vercel.json` rewrites SPA routes to `index.html` and caches hashed assets. `VITE_API_URL` points at Render.
-- **Backend:** Render runs `npm install` and `npm start` in `server/`, exposes the API over HTTPS and checks `/api/health`. `TRUST_PROXY=1` lets Express and rate limiting see the real client IP.
+- **Backend:** Render runs `npm install` and `npm start` in `server/`, exposes the API over HTTPS and checks `/api/health`. `TRUST_PROXY=1` (or `true`) lets Express and rate limiting see the real client IP; the configuration parser accepts either form and normalises it to one proxy hop.
 - **Database:** MongoDB Atlas provides the replica set (transactions work) and network access is restricted to the API.
 - **CORS:** Render's `FRONTEND_URL` must exactly match the Vercel origin, or the browser will block requests.
 

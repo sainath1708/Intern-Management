@@ -35,6 +35,20 @@ if (jwtSecret && jwtSecret.length < 32) {
   problems.push('JWT_SECRET must be at least 32 characters long');
 }
 
+// A production API with a localhost-only allowlist would reject the deployed SPA.
+requireInProduction('FRONTEND_URL', process.env.FRONTEND_URL?.trim());
+
+// Hosts commonly provide TRUST_PROXY=true/false while Express expects a hop
+// count. Normalise both forms, and fall back to one proxy hop for anything
+// unrecognised (Render terminates TLS in front of the app).
+const parseTrustProxy = (value) => {
+  const normalized = String(value ?? '').trim().toLowerCase();
+  if (normalized === 'true') return 1;
+  if (normalized === 'false' || normalized === '0') return false;
+  const parsed = Number.parseInt(normalized, 10);
+  return Number.isInteger(parsed) && parsed >= 0 ? parsed : 1;
+};
+
 if (problems.length > 0) {
   const message = `Invalid environment configuration:\n  - ${problems.join('\n  - ')}`;
   console.error(`\n[config] ${message}\n`);
@@ -68,6 +82,6 @@ export const env = Object.freeze({
     password: process.env.ADMIN_PASSWORD || '',
   }),
   seedInternPassword: process.env.SEED_INTERN_PASSWORD || 'Intern@12345',
-  trustProxy: Number(process.env.TRUST_PROXY || 1),
+  trustProxy: parseTrustProxy(process.env.TRUST_PROXY),
   bcryptRounds: 12,
 });

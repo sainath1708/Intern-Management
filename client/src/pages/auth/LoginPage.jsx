@@ -11,18 +11,20 @@ import { validateLogin } from '../../utils/validation';
 import { ROLE_HOME } from '../../utils/constants';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
+// Demo shortcuts are opt-in through Vite environment variables so production
+// builds never ship administrator credentials inside the JavaScript bundle.
 const demoAccounts = [
   {
     label: 'Admin demo',
-    email: 'admin@qubenix.ai',
-    password: 'Admin@12345',
+    email: import.meta.env.VITE_DEMO_ADMIN_EMAIL || '',
+    password: import.meta.env.VITE_DEMO_ADMIN_PASSWORD || '',
   },
   {
     label: 'Intern demo',
-    email: 'aarav.sharma@qubenix.ai',
-    password: 'Intern@12345',
+    email: import.meta.env.VITE_DEMO_INTERN_EMAIL || '',
+    password: import.meta.env.VITE_DEMO_INTERN_PASSWORD || '',
   },
-];
+].filter((account) => account.email && account.password);
 
 export default function LoginPage() {
   useDocumentTitle('Sign in');
@@ -142,24 +144,27 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <div className="mt-7 border-t border-ink-100 pt-5">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-400">Demo accounts</p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {demoAccounts.map((account) => (
-              <button
-                key={account.email}
-                type="button"
-                onClick={() => fillDemo(account)}
-                className="rounded-lg border border-ink-200 bg-ink-50 px-3 py-1.5 text-xs font-medium text-ink-600 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
-              >
-                {account.label}
-              </button>
-            ))}
+        {demoAccounts.length > 0 ? (
+          <div className="mt-7 border-t border-ink-100 pt-5">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-400">Demo accounts</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {demoAccounts.map((account) => (
+                <button
+                  key={account.email}
+                  type="button"
+                  onClick={() => fillDemo(account)}
+                  className="rounded-lg border border-ink-200 bg-ink-50 px-3 py-1.5 text-xs font-medium text-ink-600 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
+                >
+                  {account.label}
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 text-[11px] leading-relaxed text-ink-400">
+              Demo-only shortcuts configured through local environment variables. They are never enabled in the
+              production build.
+            </p>
           </div>
-          <p className="mt-2 text-[11px] leading-relaxed text-ink-400">
-            Populated by the seed script in the demo environment. Use your own account in production.
-          </p>
-        </div>
+        ) : null}
       </div>
 
       <p className="mt-6 text-center text-xs text-ink-400">
